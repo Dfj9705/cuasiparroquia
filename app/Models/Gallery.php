@@ -22,4 +22,14 @@ class Gallery extends Model
     {
         return $this->hasMany(GalleryItem::class);
     }
+
+    public function scopePublished($query)
+    {
+        return $query
+            ->where('gal_status', 'publicado')
+            ->where(function ($query) {
+                $query->whereNull('gal_published_at')
+                    ->orWhere('gal_published_at', '<=', now());
+            });
+    }
 }

@@ -21,4 +21,18 @@ class Announcement extends Model
         'ann_starts_at' => 'datetime',
         'ann_ends_at' => 'datetime',
     ];
+
+    public function scopePublished($query)
+    {
+        return $query
+            ->where('ann_status', 'publicado')
+            ->where(function ($query) {
+                $query->whereNull('ann_starts_at')
+                    ->orWhere('ann_starts_at', '<=', now());
+            })
+            ->where(function ($query) {
+                $query->whereNull('ann_ends_at')
+                    ->orWhere('ann_ends_at', '>=', now());
+            });
+    }
 }

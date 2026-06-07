@@ -30,4 +30,14 @@ class Download extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopePublished($query)
+    {
+        return $query
+            ->where('dow_status', 'publicado')
+            ->where(function ($query) {
+                $query->whereNull('dow_published_at')
+                    ->orWhere('dow_published_at', '<=', now());
+            });
+    }
 }

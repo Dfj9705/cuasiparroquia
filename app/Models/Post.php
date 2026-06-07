@@ -31,4 +31,14 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopePublished($query)
+    {
+        return $query
+            ->where('pos_status', 'publicado')
+            ->where(function ($query) {
+                $query->whereNull('pos_published_at')
+                    ->orWhere('pos_published_at', '<=', now());
+            });
+    }
 }
