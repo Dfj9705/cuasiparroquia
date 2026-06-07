@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class DownloadCategory extends Model
 {
     protected $fillable = [
-        'dca_name',
-        'dca_slug',
-        'dca_description',
-        'dca_status',
+        'dcat_name',
+        'dcat_slug',
+        'dcat_description',
+        'dcat_status',
     ];
 
     public function downloads()

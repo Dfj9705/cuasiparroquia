@@ -9,16 +9,19 @@ class Download extends Model
     protected $fillable = [
         'download_category_id',
         'user_id',
-        'dow_title',
-        'dow_slug',
-        'dow_description',
-        'dow_file',
-        'dow_status',
-        'dow_published_at',
+        'down_title',
+        'down_slug',
+        'down_description',
+        'down_file',
+        'down_file_size',
+        'down_file_type',
+        'down_status',
+        'down_published_at',
     ];
 
     protected $casts = [
-        'dow_published_at' => 'datetime',
+        'down_published_at' => 'datetime',
+        'down_expires_at' => 'datetime',
     ];
 
     public function category()
@@ -34,10 +37,10 @@ class Download extends Model
     public function scopePublished($query)
     {
         return $query
-            ->where('dow_status', 'publicado')
+            ->where('down_status', 'publicado')
             ->where(function ($query) {
-                $query->whereNull('dow_published_at')
-                    ->orWhere('dow_published_at', '<=', now());
+                $query->whereNull('down_published_at')
+                    ->orWhere('down_published_at', '<=', now());
             });
     }
 }
