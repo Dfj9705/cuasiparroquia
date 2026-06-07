@@ -12,37 +12,79 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
+use Filament\Forms\Set;
 
 class AnnouncementResource extends Resource
 {
     protected static ?string $model = Announcement::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-megaphone';
+
+    protected static ?string $navigationGroup = 'Contenido';
+
+    protected static ?string $navigationLabel = 'Anuncios';
+
+    protected static ?string $modelLabel = 'Anuncio';
+
+    protected static ?string $pluralModelLabel = 'Anuncios';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('ann_title')
-                    ->required(),
-                Forms\Components\TextInput::make('ann_slug')
-                    ->required(),
-                Forms\Components\Textarea::make('ann_description')
-                    ->columnSpanFull(),
-                Forms\Components\FileUpload::make('ann_image')
-                    ->image(),
-                Forms\Components\TextInput::make('ann_status')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('ann_published_at'),
-                Forms\Components\DateTimePicker::make('ann_expires_at'),
-                Forms\Components\TextInput::make('ann_priority')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Forms\Components\TextInput::make('created_by')
-                    ->numeric(),
-                Forms\Components\TextInput::make('updated_by')
-                    ->numeric(),
+                Forms\Components\Section::make('Información del anuncio')
+                    ->schema([
+                        Forms\Components\TextInput::make('ann_title')
+                            ->label('Título')
+                            ->required()
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (Set $set, ?string $state) {
+                                $set('ann_slug', Str::slug($state));
+                            }),
+
+                        Forms\Components\Textarea::make('ann_description')
+                            ->label('Descripción')
+                            ->rows(4)
+                            ->columnSpanFull(),
+
+                        Forms\Components\TextInput::make('ann_slug')
+                            ->label('Slug')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(255),
+
+                        Forms\Components\Select::make('ann_status')
+                            ->label('Estado')
+                            ->options([
+                                'borrador' => 'Borrador',
+                                'publicado' => 'Publicado',
+                                'inactivo' => 'Inactivo',
+                            ])
+                            ->default('borrador')
+                            ->required(),
+
+                        Forms\Components\DateTimePicker::make('ann_published_at')
+                            ->label('Fecha de publicación'),
+
+                        Forms\Components\DateTimePicker::make('ann_expires_at')
+                            ->label('Fecha de vencimiento'),
+
+                        Forms\Components\TextInput::make('ann_priority')
+                            ->label('Prioridad')
+                            ->numeric()
+                            ->default(0),
+
+                        Forms\Components\FileUpload::make('ann_image')
+                            ->label('Imagen')
+                            ->image()
+                            ->disk('public')
+                            ->directory('announcements')
+                            ->imageEditor()
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(2),
             ]);
     }
 
@@ -50,55 +92,61 @@ class AnnouncementResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('ann_image')
+                    ->label('Imagen')
+                    ->disk('public')
+                    ->circular(),
+
                 Tables\Columns\TextColumn::make('ann_title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('ann_slug')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('ann_image'),
+                    ->label('Título')
+                    ->searchable()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('ann_status')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('ann_published_at')
-                    ->dateTime()
+                    ->label('Estado')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'publicado' => 'success',
+                        'borrador' => 'warning',
+                        'inactivo' => 'danger',
+                        default => 'gray',
+                    })
                     ->sortable(),
-                Tables\Columns\TextColumn::make('ann_expires_at')
-                    ->dateTime()
-                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('ann_priority')
-                    ->numeric()
+                    ->label('Prioridad')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_by')
-                    ->numeric()
+
+                Tables\Columns\TextColumn::make('ann_published_at')
+                    ->label('Publicado')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('updated_by')
-                    ->numeric()
+
+                Tables\Columns\TextColumn::make('ann_expires_at')
+                    ->label('Vence')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('ann_status')
+                    ->label('Estado')
+                    ->options([
+                        'borrador' => 'Borrador',
+                        'publicado' => 'Publicado',
+                        'inactivo' => 'Inactivo',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
+            ])
+            ->defaultSort('ann_priority', 'desc');
     }
 
     public static function getPages(): array
@@ -106,6 +154,7 @@ class AnnouncementResource extends Resource
         return [
             'index' => Pages\ListAnnouncements::route('/'),
             'create' => Pages\CreateAnnouncement::route('/create'),
+            'view' => Pages\ViewAnnouncement::route('/{record}'),
             'edit' => Pages\EditAnnouncement::route('/{record}/edit'),
         ];
     }
