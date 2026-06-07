@@ -17,17 +17,83 @@ class SiteSettingResource extends Resource
 {
     protected static ?string $model = SiteSetting::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+
+    protected static ?string $navigationGroup = 'Configuración';
+
+    protected static ?string $navigationLabel = 'Ajustes del sitio';
+
+    protected static ?string $modelLabel = 'Ajuste del sitio';
+
+    protected static ?string $pluralModelLabel = 'Ajustes del sitio';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('set_key')
-                    ->required(),
-                Forms\Components\Textarea::make('set_value')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('set_group'),
+                \Filament\Forms\Components\Section::make('Información general')
+                    ->schema([
+                        \Filament\Forms\Components\TextInput::make('site_name')
+                            ->label('Nombre del sitio')
+                            ->required(),
+
+                        \Filament\Forms\Components\TextInput::make('site_slogan')
+                            ->label('Eslogan'),
+
+                        \Filament\Forms\Components\Select::make('site_status')
+                            ->options([
+                                'activo' => 'Activo',
+                                'mantenimiento' => 'Mantenimiento',
+                            ])
+                            ->default('activo')
+                            ->required(),
+                    ]),
+                \Filament\Forms\Components\Section::make('Contacto')
+                    ->schema([
+                        \Filament\Forms\Components\TextInput::make('site_email')
+                            ->email(),
+
+                        \Filament\Forms\Components\TextInput::make('site_phone'),
+
+                        \Filament\Forms\Components\TextInput::make('site_whatsapp'),
+
+                        \Filament\Forms\Components\Textarea::make('site_address')
+                            ->rows(3),
+                    ]),
+                \Filament\Forms\Components\Section::make('Redes sociales')
+                    ->schema([
+                        \Filament\Forms\Components\TextInput::make('site_facebook')
+                            ->url(),
+
+                        \Filament\Forms\Components\TextInput::make('site_instagram')
+                            ->url(),
+                        \Filament\Forms\Components\TextInput::make('site_tiktok')
+                            ->url(),
+
+                        \Filament\Forms\Components\TextInput::make('site_youtube')
+                            ->url(),
+                    ]),
+
+                \Filament\Forms\Components\Section::make('Identidad visual')
+                    ->schema([
+                        \Filament\Forms\Components\FileUpload::make('site_logo')
+                            ->image()
+                            ->disk('public')
+                            ->directory('settings'),
+
+                        \Filament\Forms\Components\FileUpload::make('site_favicon')
+                            ->image()
+                            ->disk('public')
+                            ->directory('settings'),
+                    ]),
+                \Filament\Forms\Components\Section::make('SEO')
+                    ->schema([
+                        \Filament\Forms\Components\TextInput::make('site_meta_title'),
+
+                        \Filament\Forms\Components\Textarea::make('site_meta_description')
+                            ->rows(3),
+                    ])
+                    ->collapsed()
             ]);
     }
 
@@ -35,29 +101,22 @@ class SiteSettingResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('set_key')
+                Tables\Columns\ImageColumn::make('site_logo')
+                    ->disk('public'),
+
+                Tables\Columns\TextColumn::make('site_name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('set_group')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('site_email'),
+
+                Tables\Columns\TextColumn::make('site_status')
+                    ->badge(),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 
@@ -75,5 +134,10 @@ class SiteSettingResource extends Resource
             'create' => Pages\CreateSiteSetting::route('/create'),
             'edit' => Pages\EditSiteSetting::route('/{record}/edit'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::getModel()::count() === 0;
     }
 }

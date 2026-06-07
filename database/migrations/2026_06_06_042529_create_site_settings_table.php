@@ -13,9 +13,29 @@ return new class extends Migration {
         Schema::create('site_settings', function (Blueprint $table) {
             $table->id();
 
-            $table->string('set_key')->unique();
-            $table->text('set_value')->nullable();
-            $table->string('set_group')->nullable();
+            $table->string('site_name');
+            $table->string('site_slogan')->nullable();
+
+            $table->string('site_email')->nullable();
+            $table->string('site_phone')->nullable();
+            $table->string('site_whatsapp')->nullable();
+
+            $table->text('site_address')->nullable();
+
+            $table->string('site_logo')->nullable();
+            $table->string('site_favicon')->nullable();
+
+            $table->string('site_facebook')->nullable();
+            $table->string('site_instagram')->nullable();
+            $table->string('site_youtube')->nullable();
+
+            $table->string('site_meta_title')->nullable();
+            $table->text('site_meta_description')->nullable();
+
+            $table->enum('site_status', [
+                'activo',
+                'mantenimiento',
+            ])->default('activo');
 
             $table->timestamps();
         });
