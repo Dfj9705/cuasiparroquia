@@ -8,10 +8,11 @@ class GalleryItem extends Model
 {
     protected $fillable = [
         'gallery_id',
-        'git_title',
-        'git_image',
-        'git_order',
-        'git_status',
+        'gitem_title',
+        'gitem_description',
+        'gitem_image',
+        'gitem_order',
+        'gitem_status',
     ];
 
     public function gallery()
