@@ -21,6 +21,15 @@ class PostCategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Contenido';
+
+    protected static ?string $navigationLabel = 'Categorias Posts';
+
+    protected static ?string $modelLabel = 'Categoría';
+
+    protected static ?string $pluralModelLabel = 'Categorías';
+
+
     public static function form(Form $form): Form
     {
         return $form
