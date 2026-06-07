@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class PostCategory extends Model
 {
     protected $fillable = [
-        'pca_name',
-        'pca_slug',
-        'pca_description',
-        'pca_status',
+        'pcat_name',
+        'pcat_slug',
+        'pcat_description',
+        'pcat_status',
     ];
 
     public function posts()

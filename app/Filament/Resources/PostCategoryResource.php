@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
+use Filament\Forms\Set;
 
 class PostCategoryResource extends Resource
 {
@@ -24,12 +26,32 @@ class PostCategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('pcat_name')
-                    ->required(),
+                    ->label('Nombre')
+                    ->required()
+                    ->maxLength(255)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (Set $set, ?string $state) {
+                        $set('pcat_slug', Str::slug($state));
+                    }),
+
                 Forms\Components\TextInput::make('pcat_slug')
-                    ->required(),
+                    ->label('Slug')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+
                 Forms\Components\Textarea::make('pcat_description')
+                    ->label('Descripción')
+                    ->rows(4)
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('pcat_status')
+
+                Forms\Components\Select::make('pcat_status')
+                    ->label('Estado')
+                    ->options([
+                        'publicado' => 'Publicado',
+                        'borrador' => 'Borrador',
+                        'inactivo' => 'Inactivo',
+                    ])
+                    ->default('publicado')
                     ->required(),
             ]);
     }
@@ -39,30 +61,39 @@ class PostCategoryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('pcat_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('pcat_slug')
-                    ->searchable(),
+                    ->label('Nombre')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('posts_count')
+                    ->label('Posts')
+                    ->counts('posts'),
+
                 Tables\Columns\TextColumn::make('pcat_status')
-                    ->searchable(),
+                    ->label('Estado')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'publicado' => 'success',
+                        'borrador' => 'warning',
+                        'inactivo' => 'danger',
+                        default => 'gray',
+                    }),
+
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Creado')
+                    ->dateTime('d/m/Y'),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('pcat_status')
+                    ->options([
+                        'publicado' => 'Publicado',
+                        'borrador' => 'Borrador',
+                        'inactivo' => 'Inactivo',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteAction::make(),
             ]);
     }
 

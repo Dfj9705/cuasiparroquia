@@ -3,109 +3,171 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Post;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
+use Filament\Forms\Set;
 
 class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
+
+    protected static ?string $navigationGroup = 'Contenido';
+
+    protected static ?string $navigationLabel = 'Noticias / Posts';
+
+    protected static ?string $modelLabel = 'Post';
+
+    protected static ?string $pluralModelLabel = 'Posts';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('post_category_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('post_title')
-                    ->required(),
-                Forms\Components\TextInput::make('post_slug')
-                    ->required(),
-                Forms\Components\TextInput::make('post_summary'),
-                Forms\Components\Textarea::make('post_content')
-                    ->columnSpanFull(),
-                Forms\Components\FileUpload::make('post_image')
-                    ->image(),
-                Forms\Components\TextInput::make('post_status')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('post_published_at'),
-                Forms\Components\DateTimePicker::make('post_expires_at'),
-                Forms\Components\TextInput::make('post_meta_title'),
-                Forms\Components\Textarea::make('post_meta_description')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('created_by')
-                    ->numeric(),
-                Forms\Components\TextInput::make('updated_by')
-                    ->numeric(),
+                Forms\Components\Section::make('Información principal')
+                    ->schema([
+                        Forms\Components\Select::make('post_category_id')
+                            ->label('Categoría')
+                            ->relationship('category', 'pcat_name')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+
+                        Forms\Components\TextInput::make('post_title')
+                            ->label('Título')
+                            ->required()
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (Set $set, ?string $state) {
+                                $set('post_slug', Str::slug($state));
+                            }),
+
+                        Forms\Components\TextInput::make('post_slug')
+                            ->label('Slug')
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(255),
+
+                        Forms\Components\Select::make('post_status')
+                            ->label('Estado')
+                            ->options([
+                                'borrador' => 'Borrador',
+                                'publicado' => 'Publicado',
+                                'inactivo' => 'Inactivo',
+                            ])
+                            ->default('borrador')
+                            ->required(),
+
+                        Forms\Components\DateTimePicker::make('post_published_at')
+                            ->label('Fecha de publicación'),
+
+                    ])
+                    ->columns(2),
+
+                Forms\Components\Section::make('Contenido')
+                    ->schema([
+                        Forms\Components\Textarea::make('post_summary')
+                            ->label('Resumen')
+                            ->rows(3)
+                            ->columnSpanFull(),
+
+                        Forms\Components\RichEditor::make('post_content')
+                            ->label('Contenido')
+                            ->required()
+                            ->columnSpanFull(),
+
+                        Forms\Components\FileUpload::make('post_image')
+                            ->label('Imagen principal')
+                            ->disk('public')
+                            ->directory('posts')
+                            ->image()
+                            ->imageEditor()
+                            ->maxSize(2048)
+                            ->columnSpanFull(),
+                    ]),
+
+                Forms\Components\Section::make('SEO')
+                    ->schema([
+                        Forms\Components\TextInput::make('post_meta_title')
+                            ->label('Meta título')
+                            ->maxLength(255),
+
+                        Forms\Components\Textarea::make('post_meta_description')
+                            ->label('Meta descripción')
+                            ->rows(3)
+                            ->maxLength(255)
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(2)
+                    ->collapsed(),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('post_published_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('post_category_id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\ImageColumn::make('post_image')
+                    ->label('Imagen')
+                    ->disk('public')
+                    ->square(),
+
                 Tables\Columns\TextColumn::make('post_title')
+                    ->label('Título')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('category.pcat_name')
+                    ->label('Categoría')
+                    ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('post_slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('post_summary')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('post_image'),
+
                 Tables\Columns\TextColumn::make('post_status')
-                    ->searchable(),
+                    ->label('Estado')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'publicado' => 'success',
+                        'borrador' => 'warning',
+                        'inactivo' => 'danger',
+                        default => 'gray',
+                    })
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('post_published_at')
-                    ->dateTime()
+                    ->label('Publicado')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('post_expires_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('post_meta_title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_by')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('updated_by')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('post_status')
+                    ->label('Estado')
+                    ->options([
+                        'borrador' => 'Borrador',
+                        'publicado' => 'Publicado',
+                        'inactivo' => 'Inactivo',
+                    ]),
+
+                Tables\Filters\SelectFilter::make('post_category_id')
+                    ->label('Categoría')
+                    ->relationship('category', 'pcat_name'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array

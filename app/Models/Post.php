@@ -9,17 +9,20 @@ class Post extends Model
     protected $fillable = [
         'post_category_id',
         'user_id',
-        'pos_title',
-        'pos_slug',
-        'pos_excerpt',
-        'pos_content',
-        'pos_image',
-        'pos_status',
-        'pos_published_at',
+        'post_title',
+        'post_slug',
+        'post_summary',
+        'post_content',
+        'post_image',
+        'post_status',
+        'post_published_at',
+        'post_order',
+        'post_meta_title',
+        'post_meta_description',
     ];
 
     protected $casts = [
-        'pos_published_at' => 'datetime',
+        'post_published_at' => 'datetime',
     ];
 
     public function category()
@@ -35,10 +38,10 @@ class Post extends Model
     public function scopePublished($query)
     {
         return $query
-            ->where('pos_status', 'publicado')
+            ->where('post_status', 'publicado')
             ->where(function ($query) {
-                $query->whereNull('pos_published_at')
-                    ->orWhere('pos_published_at', '<=', now());
+                $query->whereNull('post_published_at')
+                    ->orWhere('post_published_at', '<=', now());
             });
     }
 }
