@@ -26,6 +26,7 @@
         <script src="{{ asset('sneat/js/main.js') }}"></script>
 
         @livewireScripts
+
     </body>
 
 </html>

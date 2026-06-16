@@ -46,9 +46,8 @@
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <h5 class="mb-3">Formulario de contacto</h5>
-
-                            <div class="alert alert-info mb-0">
-                                El formulario dinámico lo trabajaremos en la Fase 6 con Livewire.
+                            <div class="">
+                                <livewire:contact-form />
                             </div>
                         </div>
                     </div>
