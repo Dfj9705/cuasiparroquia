@@ -24,19 +24,20 @@
                             <h5 class="mb-3">Información de contacto</h5>
 
                             <p class="text-muted mb-2">
-                                Dirección institucional
+                                {{ $siteSettings?->site_address ?? 'Dirección no disponible' }}
                             </p>
 
                             <p class="text-muted mb-2">
-                                Teléfono: 0000-0000
+                                Teléfono: {{ $siteSettings?->site_phone ?? 'Teléfono no disponible' }}
                             </p>
 
                             <p class="text-muted mb-2">
-                                Correo: info@sitio.com
+                                Correo: {{ $siteSettings?->site_email ?? 'Correo no disponible' }}
                             </p>
 
                             <p class="text-muted mb-0">
-                                Horario: lunes a viernes de 8:00 a 16:00
+                                Horario:
+                                {{ $siteSettings?->site_hours ?? 'Lunes a Sábado de 8:00 a 12:00 y de 14:00 a 18:00' }}
                             </p>
                         </div>
                     </div>

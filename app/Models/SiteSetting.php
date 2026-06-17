@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cache;
 use Illuminate\Database\Eloquent\Model;
 
 class SiteSetting extends Model
@@ -23,4 +24,11 @@ class SiteSetting extends Model
         'site_og_image',
         'site_status',
     ];
+
+    protected static function booted()
+    {
+        static::saved(fn() => Cache::forget('site_settings'));
+        static::deleted(fn() => Cache::forget('site_settings'));
+        static::updated(fn() => Cache::forget('site_settings'));
+    }
 }

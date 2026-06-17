@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="{{ asset('sneat/vendor/css/core.css') }}">
         <link rel="stylesheet" href="{{ asset('sneat/vendor/css/theme-default.css') }}">
         <link rel="stylesheet" href="{{ asset('sneat/css/demo.css') }}">
+        <link rel="stylesheet" href="{{ asset('sneat/vendor/fonts/boxicons.css') }}">
         @livewireStyles
     </head>
 

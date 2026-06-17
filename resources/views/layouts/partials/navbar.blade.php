@@ -1,7 +1,12 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ route('public.home') }}">
-            {{config('app.name')}}
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ route('public.home') }}">
+
+            @if($siteSettings?->site_logo)
+                <img src="{{ Storage::url($siteSettings->site_logo) }}" alt="{{ $siteSettings->site_name }}" height="50"
+                    class="me-2">
+            @endif
+            <span class="">{{ $siteSettings?->site_name ?? config('app.name') }}</span>
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
