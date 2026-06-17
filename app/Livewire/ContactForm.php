@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Contact;
 use Livewire\Component;
+use Illuminate\Support\Facades\RateLimiter;
 
 class ContactForm extends Component
 {
@@ -41,6 +42,21 @@ class ContactForm extends Component
 
     public function send(): void
     {
+
+        $key = 'contact-form:' . request()->ip();
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+
+            $this->addError(
+                'rate_limit',
+                'Demasiados intentos. Intente nuevamente en ' . ceil($seconds / 60) . ' minuto(s).'
+            );
+
+            return;
+        }
+
+        RateLimiter::hit($key, 300);
         $this->validate();
 
         Contact::create([

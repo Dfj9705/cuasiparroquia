@@ -20,6 +20,7 @@ class SiteSetting extends Model
         'site_youtube',
         'site_meta_title',
         'site_meta_description',
+        'site_og_image',
         'site_status',
     ];
 }

@@ -88,12 +88,25 @@ class SiteSettingResource extends Resource
                     ]),
                 \Filament\Forms\Components\Section::make('SEO')
                     ->schema([
-                        \Filament\Forms\Components\TextInput::make('site_meta_title'),
+                        \Filament\Forms\Components\TextInput::make('site_meta_title')
+                            ->label('Meta título')
+                            ->maxLength(60)
+                            ->helperText('Recomendado: máximo 60 caracteres.'),
 
                         \Filament\Forms\Components\Textarea::make('site_meta_description')
-                            ->rows(3),
+                            ->label('Meta descripción')
+                            ->rows(3)
+                            ->maxLength(160)
+                            ->helperText('Recomendado: máximo 160 caracteres.'),
+
+                        \Filament\Forms\Components\FileUpload::make('site_og_image')
+                            ->label('Imagen para compartir')
+                            ->image()
+                            ->disk('public')
+                            ->directory('settings/seo')
+                            ->helperText('Imagen usada al compartir el sitio en redes sociales.'),
                     ])
-                    ->collapsed()
+                    ->collapsed(),
             ]);
     }
 

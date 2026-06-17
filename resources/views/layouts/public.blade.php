@@ -5,10 +5,10 @@
         <meta charset="UTF-8">
         <title>@yield('title', 'Cuasiparroquia')</title>
 
+        <x-seo />
         <link rel="stylesheet" href="{{ asset('sneat/vendor/css/core.css') }}">
         <link rel="stylesheet" href="{{ asset('sneat/vendor/css/theme-default.css') }}">
         <link rel="stylesheet" href="{{ asset('sneat/css/demo.css') }}">
-
         @livewireStyles
     </head>
 

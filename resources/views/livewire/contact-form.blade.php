@@ -5,6 +5,12 @@
         </div>
     @endif
 
+    @error('rate_limit')
+        <div class="alert alert-warning">
+            {{ $message }}
+        </div>
+    @enderror
+
     <form wire:submit.prevent="send">
         {{-- Honeypot oculto --}}
         <div style="display: none;">

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ContactResource\Pages;
 use App\Filament\Resources\ContactResource\RelationManagers;
 use App\Models\Contact;
+use Filament\Actions\ViewAction;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -60,7 +61,7 @@ class ContactResource extends Resource
                 Select::make('con_status')
                     ->label('Estado')
                     ->options([
-                        'nuevo' => 'Nuevo',
+                        'pendiente' => 'Pendiente',
                         'leido' => 'Leído',
                         'respondido' => 'Respondido',
                         'archivado' => 'Archivado',
@@ -90,7 +91,7 @@ class ContactResource extends Resource
                     ->label('Estado')
                     ->badge()
                     ->color(fn(string $state): string => match ($state) {
-                        'nuevo' => 'danger',
+                        'pendiente' => 'danger',
                         'leido' => 'warning',
                         'respondido' => 'success',
                         'archivado' => 'gray',
@@ -105,12 +106,13 @@ class ContactResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('con_status')
                     ->options([
-                        'nuevo' => 'Nuevo',
+                        'pendiente' => 'Pendiente',
                         'leido' => 'Leído',
                         'respondido' => 'Respondido',
                         'archivado' => 'Archivado',
                     ]),
             ])->actions([
+                    Tables\Actions\ViewAction::make(),
                     Tables\Actions\Action::make('leido')
                         ->label('Marcar leído')
                         ->icon('heroicon-o-check')
@@ -118,11 +120,36 @@ class ContactResource extends Resource
 
                             $record->update([
                                 'con_status' => 'leido',
-                                'con_read_at' => now(),
+                                'updated_at' => now(),
                             ]);
 
                         })
-                        ->visible(fn(Contact $record) => $record->con_status === 'nuevo'),
+                        ->visible(fn(Contact $record) => $record->con_status === 'pendiente'),
+                    Tables\Actions\Action::make('Marcar como respondido')
+                        ->label('Marcar como respondido')
+                        ->icon('heroicon-o-check')
+                        ->action(function (Contact $record) {
+
+                            $record->update([
+                                'con_status' => 'respondido',
+                                'updated_at' => now(),
+                            ]);
+
+                        })
+                        ->visible(fn(Contact $record) => $record->con_status === 'leido'),
+                    Tables\Actions\Action::make('Archivar')
+                        ->label('Archivar')
+                        ->icon('heroicon-o-archive-box')
+                        ->color('danger')
+                        ->action(function (Contact $record) {
+
+                            $record->update([
+                                'con_status' => 'archivado',
+                                'updated_at' => now(),
+                            ]);
+
+                        })
+                        ->visible(fn(Contact $record) => $record->con_status === 'leido' || $record->con_status === 'respondido'),
                 ]);
     }
 
