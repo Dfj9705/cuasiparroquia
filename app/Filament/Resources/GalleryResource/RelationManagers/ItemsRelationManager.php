@@ -40,7 +40,14 @@ class ItemsRelationManager extends RelationManager
                     ->directory('galleries')
                     ->imageEditor()
                     ->required()
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->imageCropAspectRatio('3:2')
+                    ->imageResizeMode('cover')
+                    ->imageEditorAspectRatios([
+                        '16:9',
+                        '4:3',
+                        '1:1',
+                    ]),
 
                 Forms\Components\TextInput::make('gitem_order')
                     ->label('Orden')

@@ -89,7 +89,14 @@ class PostResource extends Resource
                             ->image()
                             ->imageEditor()
                             ->maxSize(2048)
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->imageCropAspectRatio('3:2')
+                            ->imageResizeMode('cover')
+                            ->imageEditorAspectRatios([
+                                '16:9',
+                                '4:3',
+                                '1:1',
+                            ]),
                     ]),
 
                 Forms\Components\Section::make('SEO')

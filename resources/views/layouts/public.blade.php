@@ -11,6 +11,8 @@
         <link rel="stylesheet" href="{{ asset('sneat/css/demo.css') }}">
         <link rel="stylesheet" href="{{ asset('sneat/vendor/fonts/boxicons.css') }}">
         @livewireStyles
+        @vite('resources/scss/app.scss')
+        @stack('styles')
     </head>
 
     <body>
@@ -27,7 +29,8 @@
         <script src="{{ asset('sneat/js/main.js') }}"></script>
 
         @livewireScripts
-
+        @vite('resources/js/app.js')
+        @stack('scripts')
     </body>
 
 </html>

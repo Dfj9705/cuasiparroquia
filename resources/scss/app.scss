@@ -1,0 +1,15 @@
+@use 'variables'  as *;
+@use 'buttons';
+@use 'cards';
+@use 'navbar';
+@use 'utilities';
+@use 'gallery';
+
+
+.nav-item.active::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: $church-secondary;
+}

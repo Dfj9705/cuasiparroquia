@@ -22,6 +22,7 @@ class SiteSetting extends Model
         'site_meta_title',
         'site_meta_description',
         'site_og_image',
+        'site_header_image',
         'site_status',
     ];
 

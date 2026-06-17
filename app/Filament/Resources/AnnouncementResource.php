@@ -82,12 +82,15 @@ class AnnouncementResource extends Resource
                             ->disk('public')
                             ->directory('announcements')
                             ->imageEditor()
-                            ->imageCropAspectRatio('3:2')
+                            // ->imageCropAspectRatio('4:1')
                             ->imageResizeMode('cover')
                             ->imageEditorAspectRatios([
                                 '16:9',
                                 '4:3',
                                 '1:1',
+                                '3:2',
+                                '3:1',
+                                '4:1'
                             ])
                             ->columnSpanFull(),
                     ])

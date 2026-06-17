@@ -61,7 +61,7 @@
             <div class="col-12">
                 <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
                     <span wire:loading.remove>Enviar mensaje</span>
-                    <span wire:loading>Enviando...</span>
+                    <span wire:loading>Espere...</span>
                 </button>
             </div>
         </div>

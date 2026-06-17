@@ -1,57 +1,43 @@
 @extends('layouts.public')
 
-@section('title', $gallery->gall_title)
-@section('meta_description', $gallery->gall_description ?? 'Detalle de galería institucional.')
+@section('title', $gallery->gal_title)
 
 @section('content')
+    <div class="container py-5">
 
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h1 class="fw-bold">{{ $gallery->gall_title }}</h1>
+        <div class="mb-4">
+            <a href="{{ route('public.galleries.index') }}" class="btn btn-sm btn-outline-secondary mb-3">
+                <i class="bi bi-arrow-left me-2"></i> Volver a galerías
+            </a>
 
-            @if($gallery->gall_description)
-                <p class="text-muted mb-0">
-                    {{ $gallery->gall_description }}
-                </p>
+            <h1 class="fw-bold mb-2">{{ $gallery->gal_title }}</h1>
+
+            @if($gallery->gal_description)
+                <p class="text-muted">{{ $gallery->gal_description }}</p>
             @endif
         </div>
-    </section>
 
-    <section class="py-5">
-        <div class="container">
-            <div class="row g-4">
-                @forelse($gallery->items as $item)
-                    <div class="col-md-4">
-                        <div class="card shadow-sm h-100">
-                            @if($item->gitem_image)
-                                <img src="{{ Storage::url($item->gitem_image) }}" class="card-img-top"
-                                    alt="{{ $item->gitem_title }}">
-                            @endif
-
-                            @if($item->gitem_title || $item->gitem_description)
-                                <div class="card-body">
-                                    @if($item->gitem_title)
-                                        <h5>{{ $item->gitem_title }}</h5>
-                                    @endif
-
-                                    @if($item->gitem_description)
-                                        <p class="text-muted mb-0">
-                                            {{ $item->gitem_description }}
-                                        </p>
-                                    @endif
-                                </div>
-                            @endif
-                        </div>
+        @if($gallery->items->count())
+            <div id="gallery-grid" class="gallery-grid">
+                @foreach($gallery->items as $item)
+                    <div class="gallery-item">
+                        <a href="{{ Storage::url($item->gitem_image) }}" class="gallery-lightbox"
+                            data-gallery="gallery-{{ $gallery->id }}" data-title="{{ $item->gitem_title }}">
+                            <img src="{{ Storage::url($item->gitem_image) }}" alt="{{ $item->gitem_title ?? $gallery->gal_title }}"
+                                loading="lazy">
+                        </a>
                     </div>
-                @empty
-                    <div class="col-12">
-                        <div class="alert alert-info">
-                            Esta galería aún no tiene imágenes publicadas.
-                        </div>
-                    </div>
-                @endforelse
+                @endforeach
             </div>
-        </div>
-    </section>
+        @else
+            <div class="alert alert-info">
+                Esta galería aún no tiene fotografías publicadas.
+            </div>
+        @endif
 
+    </div>
 @endsection
+
+@push('scripts')
+    @vite('resources/js/gallery.js')
+@endpush

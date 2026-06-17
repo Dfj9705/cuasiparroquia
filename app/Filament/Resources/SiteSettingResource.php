@@ -67,8 +67,6 @@ class SiteSettingResource extends Resource
 
                         \Filament\Forms\Components\TextInput::make('site_instagram')
                             ->url(),
-                        \Filament\Forms\Components\TextInput::make('site_tiktok')
-                            ->url(),
 
                         \Filament\Forms\Components\TextInput::make('site_youtube')
                             ->url(),
@@ -79,12 +77,35 @@ class SiteSettingResource extends Resource
                         \Filament\Forms\Components\FileUpload::make('site_logo')
                             ->image()
                             ->disk('public')
-                            ->directory('settings'),
+                            ->directory('settings')
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                '16:9',
+                                '1:1',
+                            ])
+                            ->nullable(),
 
                         \Filament\Forms\Components\FileUpload::make('site_favicon')
                             ->image()
                             ->disk('public')
-                            ->directory('settings'),
+                            ->directory('settings')
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                '16:9',
+                                '1:1',
+                            ])
+                            ->nullable(),
+
+                        \Filament\Forms\Components\FileUpload::make('site_header_image')
+                            ->image()
+                            ->disk('public')
+                            ->directory('settings')
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                '16:9',
+                                '4:1'
+                            ])
+                            ->helperText('Imagen usada en la cabecera de las páginas internas.'),
                     ]),
                 \Filament\Forms\Components\Section::make('SEO')
                     ->schema([
@@ -104,6 +125,11 @@ class SiteSettingResource extends Resource
                             ->image()
                             ->disk('public')
                             ->directory('settings/seo')
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                '16:9',
+                                '1:1',
+                            ])
                             ->helperText('Imagen usada al compartir el sitio en redes sociales.'),
                     ])
                     ->collapsed(),

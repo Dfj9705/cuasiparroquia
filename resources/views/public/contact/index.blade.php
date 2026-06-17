@@ -5,14 +5,7 @@
 
 @section('content')
 
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h1 class="fw-bold mb-2">Contacto</h1>
-            <p class="text-muted mb-0">
-                Envíanos tus consultas o comentarios.
-            </p>
-        </div>
-    </section>
+    <x-header-page titlePage="Contacto" />
 
     <section class="py-5">
         <div class="container">

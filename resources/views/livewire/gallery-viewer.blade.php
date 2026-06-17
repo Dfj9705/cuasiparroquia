@@ -3,7 +3,7 @@
         <div class="col-md-6">
             <select class="form-select" wire:model.live="galleryId">
                 <option value="">
-                    Seleccione una galería
+                    Todas las galerías
                 </option>
 
                 @foreach($galleries as $gallery)
@@ -15,42 +15,35 @@
         </div>
     </div>
 
-    @if($galleryId)
+    <div class="row">
+        @forelse($filteredGalleries as $gallery)
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card h-100">
 
-        <div class="row">
+                    @if($gallery->items->first())
+                        <img src="{{ asset('storage/' . $gallery->items->first()->gitem_image) }}" class="card-img-top"
+                            alt="{{ $gallery->gal_title }}" style="height: 220px; object-fit: cover;">
+                    @endif
 
-            @forelse($items as $item)
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ $gallery->gal_title }}</h5>
 
-                <div class="col-md-3 col-sm-6 mb-4">
+                        <p class="card-text text-muted">
+                            {{ $gallery->gal_description }}
+                        </p>
 
-                    <a href="{{ asset('storage/' . $item->gitem_image) }}" target="_blank">
-                        <img src="{{ asset('storage/' . $item->gitem_image) }}" class="img-fluid rounded"
-                            alt="{{ $item->gitem_title }}">
-                    </a>
-
-                </div>
-
-            @empty
-
-                <div class="col-12">
-                    <div class="alert alert-info">
-                        Esta galería no contiene imágenes.
+                        <a href="{{ route('public.galleries.show', $gallery->gal_slug) }}" class="btn btn-primary mt-auto">
+                            Ver galería
+                        </a>
                     </div>
                 </div>
-
-            @endforelse
-
-        </div>
-
-        @if($items->count() >= $perPage)
-
-            <div class="text-center mt-4">
-                <button class="btn btn-primary" wire:click="loadMore">
-                    Cargar más
-                </button>
             </div>
-
-        @endif
-
-    @endif
+        @empty
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No hay galerías disponibles.
+                </div>
+            </div>
+        @endforelse
+    </div>
 </div>

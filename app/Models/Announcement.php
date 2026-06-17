@@ -9,7 +9,7 @@ class Announcement extends Model
     protected $fillable = [
         'ann_title',
         'ann_slug',
-        'ann_content',
+        'ann_description',
         'ann_image',
         'ann_status',
         'ann_starts_at',

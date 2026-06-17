@@ -22,9 +22,12 @@ class GalleryController extends Controller
         abort_if($gallery->gal_status !== 'publicado', 404);
 
         $gallery->load([
-            'items' => fn($query) => $query
-                ->where('gitem_status', 'publicado')
-                ->orderBy('gitem_order')
+            'items' => function ($query) {
+                $query
+                    ->where('gitem_status', 'publicado')
+                    ->orderBy('gitem_order')
+                    ->orderByDesc('created_at');
+            }
         ]);
 
         return view('public.galleries.show', compact('gallery'));

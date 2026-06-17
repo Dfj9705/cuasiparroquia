@@ -81,10 +81,6 @@
             <small class="text-muted">
                 © {{ date('Y') }} {{ $siteSettings?->site_name ?? config('app.name') }}. Todos los derechos reservados.
             </small>
-
-            <small class="text-muted">
-                Sitio web institucional
-            </small>
         </div>
     </div>
 </footer>

@@ -9,21 +9,9 @@ class GalleryViewer extends Component
 {
     public ?int $galleryId = null;
 
-    public int $perPage = 12;
-
-    public function mount(?int $galleryId = null)
+    public function updatedGalleryId(): void
     {
-        $this->galleryId = $galleryId;
-    }
-
-    public function updatedGalleryId()
-    {
-        $this->perPage = 12;
-    }
-
-    public function loadMore()
-    {
-        $this->perPage += 12;
+        // Solo refresca el filtro
     }
 
     public function render()
@@ -33,24 +21,24 @@ class GalleryViewer extends Component
             ->orderBy('gal_title')
             ->get();
 
-        $items = collect();
-
-        if ($this->galleryId) {
-            $gallery = Gallery::with([
+        $filteredGalleries = Gallery::query()
+            ->where('gal_status', 'publicado')
+            ->when($this->galleryId, function ($query) {
+                $query->where('id', $this->galleryId);
+            })
+            ->with([
                 'items' => function ($query) {
-                    $query->orderBy('gitem_order');
+                    $query
+                        ->where('gitem_status', 'publicado')
+                        ->orderBy('gitem_order');
                 }
-            ])->find($this->galleryId);
-
-            if ($gallery) {
-                $items = $gallery->items
-                    ->take($this->perPage);
-            }
-        }
+            ])
+            ->orderBy('gal_title')
+            ->get();
 
         return view('livewire.gallery-viewer', [
             'galleries' => $galleries,
-            'items' => $items,
+            'filteredGalleries' => $filteredGalleries,
         ]);
     }
 }
