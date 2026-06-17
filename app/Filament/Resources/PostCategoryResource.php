@@ -121,4 +121,24 @@ class PostCategoryResource extends Resource
             'edit' => Pages\EditPostCategory::route('/{record}/edit'),
         ];
     }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('post_categories.view');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('post_categories.create');
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('post_categories.update');
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('post_categories.delete');
+    }
 }

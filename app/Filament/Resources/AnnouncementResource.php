@@ -158,4 +158,24 @@ class AnnouncementResource extends Resource
             'edit' => Pages\EditAnnouncement::route('/{record}/edit'),
         ];
     }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('announcements.view');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('announcements.create');
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('announcements.update');
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('announcements.delete');
+    }
 }

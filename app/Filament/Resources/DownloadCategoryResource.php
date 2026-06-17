@@ -123,4 +123,24 @@ class DownloadCategoryResource extends Resource
             'edit' => Pages\EditDownloadCategory::route('/{record}/edit'),
         ];
     }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('download_categories.view');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('download_categories.create');
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('download_categories.update');
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('download_categories.delete');
+    }
 }

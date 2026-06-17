@@ -146,4 +146,18 @@ class ContactResource extends Resource
     {
         return false;
     }
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('contacts.view');
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return false;
+    }
 }

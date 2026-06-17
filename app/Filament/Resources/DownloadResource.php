@@ -184,4 +184,24 @@ class DownloadResource extends Resource
             'edit' => Pages\EditDownload::route('/{record}/edit'),
         ];
     }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('downloads.view');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('downloads.create');
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('downloads.update');
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('downloads.delete');
+    }
 }

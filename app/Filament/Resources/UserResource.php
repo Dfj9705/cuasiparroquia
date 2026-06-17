@@ -12,6 +12,11 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Spatie\Permission\Models\Role;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
@@ -38,8 +43,17 @@ class UserResource extends Resource
                     ->required(),
                 Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
+                    ->label('Contraseña')
                     ->password()
-                    ->required(),
+                    ->dehydrated(fn($state) => filled($state))
+                    ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                    ->required(fn(string $operation): bool => $operation === 'create'),
+                Select::make('roles')
+                    ->label('Roles')
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable(),
             ]);
     }
 
@@ -51,6 +65,10 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                TextColumn::make('roles.name')
+                    ->label('Roles')
+                    ->badge()
+                    ->separator(', '),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
@@ -64,7 +82,9 @@ class UserResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('roles')
+                    ->label('Rol')
+                    ->relationship('roles', 'name'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -90,5 +110,25 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('users.manage');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('users.manage');
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('users.manage');
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('users.manage');
     }
 }

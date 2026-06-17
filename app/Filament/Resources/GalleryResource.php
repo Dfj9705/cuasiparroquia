@@ -128,4 +128,24 @@ class GalleryResource extends Resource
             'edit' => Pages\EditGallery::route('/{record}/edit'),
         ];
     }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('galleries.view');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('galleries.create');
+    }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('galleries.update');
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('galleries.delete');
+    }
 }

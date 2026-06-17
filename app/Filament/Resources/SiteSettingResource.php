@@ -140,4 +140,20 @@ class SiteSettingResource extends Resource
     {
         return static::getModel()::count() === 0;
     }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('settings.manage');
+    }
+
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('settings.manage');
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()->can('settings.manage');
+    }
 }

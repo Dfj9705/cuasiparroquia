@@ -17,4 +17,24 @@ class DownloadCategory extends Model
     {
         return $this->hasMany(Download::class);
     }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->can('download_categories.view');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->can('download_categories.create');
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return auth()->user()->can('download_categories.update');
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return auth()->user()->can('download_categories.delete');
+    }
 }
