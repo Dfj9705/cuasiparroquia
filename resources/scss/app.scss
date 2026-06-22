@@ -13,3 +13,30 @@
     height: 2px;
     background: $church-secondary;
 }
+
+.header{
+    position: relative;
+    padding-top: 50px;
+}
+
+
+.layout-navbar {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    height: auto;
+    width: 100%;
+    max-width: 80%;
+    transform: translateX(-50%);
+    transition: max-width .4s ease;
+     
+}
+
+.layout-navbar.navbar-scrolled {
+    position: fixed;
+    max-width: 100%;
+    top: 0;
+    margin-top: 0;
+    height: 0;
+    
+}

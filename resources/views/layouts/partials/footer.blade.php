@@ -17,25 +17,9 @@
                     </p>
                 @endif
             </div>
+        </div>
+        <div class="row">
 
-            <div class="col-md-3">
-                <h6 class="fw-semibold mb-3">Enlaces</h6>
-
-                <ul class="list-unstyled mb-0">
-                    <li class="mb-2">
-                        <a href="{{ route('public.home') }}" class="footer-link">Inicio</a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{ route('public.posts.index') }}" class="footer-link">Noticias</a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{ route('public.downloads.index') }}" class="footer-link">Descargas</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('public.contact.index') }}" class="footer-link">Contacto</a>
-                    </li>
-                </ul>
-            </div>
 
             <div class="col-md-3">
                 <h6 class="fw-semibold mb-3">Redes sociales</h6>

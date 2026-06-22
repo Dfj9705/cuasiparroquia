@@ -10,16 +10,16 @@
         <link rel="stylesheet" href="{{ asset('sneat/vendor/css/theme-default.css') }}">
         <link rel="stylesheet" href="{{ asset('sneat/css/demo.css') }}">
         <link rel="stylesheet" href="{{ asset('sneat/vendor/fonts/boxicons.css') }}">
-        @livewireStyles
         @vite('resources/scss/app.scss')
         @stack('styles')
+        @livewireStyles
     </head>
 
     <body>
 
-        @include('layouts.partials.navbar')
 
-        <main>
+        @include('layouts.partials.header')
+        <main class="mt-0">
             @yield('content')
         </main>
 
