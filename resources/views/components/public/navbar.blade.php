@@ -26,23 +26,23 @@
                         href="{{ url('/') }}">Inicio</a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link text-dark {{ request()->url() == route('posts.index') ? 'active' : '' }}"
+                <li class="nav-item w-100">
+                    <a class="nav-link text-dark  {{ request()->url() == route('posts.index') ? 'active' : '' }}"
                         href="{{ route('posts.index') }}">Noticias</a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item w-100">
                     <a class="nav-link text-dark {{ request()->url() == url('/downloads') ? 'active' : '' }}"
-                        href="{{ url('/downloads') }}">Descargas</a>
+                        href="{{ route('downloads.index') }}">Descargas</a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item w-100">
                     <a class="nav-link text-dark {{ request()->url() == url('/galleries') ? 'active' : '' }}"
-                        href="{{ url('/galleries') }}">Galería</a>
+                        href="{{ route('galleries.index') }}">Galería</a>
                 </li>
 
-                <li class="nav-item mt-2 mt-lg-0">
-                    <a class="btn btn-primary {{ request()->url() == url('/contact') ? 'active' : '' }}"
+                <li class="nav-item w-100">
+                    <a class="btn btn-primary w-100{{ request()->url() == url('/contact') ? 'active' : '' }}"
                         href="{{ url('/contact') }}">Contacto</a>
                 </li>
             </ul>

@@ -62,7 +62,7 @@
         @stack('styles')
     </head>
 
-    <body>
+    <body >
 
         <x-public.navbar />
 
