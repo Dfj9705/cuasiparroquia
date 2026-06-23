@@ -68,7 +68,6 @@
 
         <x-public.navbar />
 
-        @include('layouts.partials.header')
         <main class="mt-0">
             @yield('content')
         </main>
