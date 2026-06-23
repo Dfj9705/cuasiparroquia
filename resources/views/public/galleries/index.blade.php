@@ -40,12 +40,7 @@
                     </div>
                 @empty
                     <div class="col-12">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body text-center py-5">
-                                <h5>No hay galerías publicadas</h5>
-                                <p class="text-muted mb-0">Pronto encontrarás fotografías disponibles.</p>
-                            </div>
-                        </div>
+                        <x-public.empty-state title="No se encontraron galerías" message="Intenta buscar con otros términos" />
                     </div>
                 @endforelse
             </div>

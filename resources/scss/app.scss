@@ -35,11 +35,17 @@ main {
     padding-right: 1.5rem;
 }
 
-.nav-link.active {
-    background-color: rgba($church-secondary, .45);
-    color: $church-primary !important;
-    font-weight: 700;
-    border-radius: .5rem;
+.navbar .nav-item .nav-link.active {
+    color: $church-primary;
+    font-weight: 600;
+}
+
+.navbar .nav-item .nav-link.active::after {
+    content: '';
+    display: block;
+    height: 2px;
+    margin-top: 4px;
+    background: $church-secondary;
 }
 
 .navbar-toggler {

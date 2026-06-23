@@ -32,17 +32,17 @@
                 </li>
 
                 <li class="nav-item w-100">
-                    <a class="nav-link text-dark {{ request()->url() == url('/downloads') ? 'active' : '' }}"
+                    <a class="nav-link text-dark {{ request()->url() == route('downloads.index') ? 'active' : '' }}"
                         href="{{ route('downloads.index') }}">Descargas</a>
                 </li>
 
                 <li class="nav-item w-100">
-                    <a class="nav-link text-dark {{ request()->url() == url('/galleries') ? 'active' : '' }}"
+                    <a class="nav-link text-dark {{ request()->url() == route('galleries.index') ? 'active' : '' }}"
                         href="{{ route('galleries.index') }}">Galería</a>
                 </li>
 
                 <li class="nav-item w-100">
-                    <a class="btn btn-primary w-100{{ request()->url() == url('/contact') ? 'active' : '' }}"
+                    <a class="btn btn-primary w-100{{ request()->url() == route('contact') ? 'active' : '' }}"
                         href="{{ route('contact') }}">Contacto</a>
                 </li>
             </ul>

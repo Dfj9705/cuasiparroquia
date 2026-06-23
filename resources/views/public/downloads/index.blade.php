@@ -37,12 +37,7 @@
                     </div>
                 @empty
                     <div class="col-12">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body text-center py-5">
-                                <h5>No hay descargas disponibles</h5>
-                                <p class="text-muted mb-0">Pronto encontrarás recursos publicados.</p>
-                            </div>
-                        </div>
+                        <x-public.empty-state title="No se encontraron descargas" message="Intenta buscar con otros términos" />
                     </div>
                 @endforelse
             </div>

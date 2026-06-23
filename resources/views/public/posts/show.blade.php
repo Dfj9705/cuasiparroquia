@@ -13,7 +13,21 @@
                     <a href="{{ route('posts.index') }}" class="btn btn-sm btn-outline-primary mb-4">
                         ← Volver a noticias
                     </a>
+                    <nav class="mb-4">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('home') }}">Inicio</a>
+                            </li>
 
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('posts.index') }}">Noticias</a>
+                            </li>
+
+                            <li class="breadcrumb-item active">
+                                {{ $post->post_title }}
+                            </li>
+                        </ol>
+                    </nav>
                     <div class="card border-0 shadow-sm overflow-hidden">
 
                         @if ($post->post_image)

@@ -51,12 +51,7 @@
                     </div>
                 @empty
                     <div class="col-12">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body text-center py-5">
-                                <h5>No hay noticias publicadas</h5>
-                                <p class="text-muted mb-0">Pronto encontrarás contenido disponible.</p>
-                            </div>
-                        </div>
+                        <x-public.empty-state title="No se encontraron noticias" message="Intenta buscar con otros términos" />
                     </div>
                 @endforelse
             </div>
