@@ -22,23 +22,28 @@
         <div class="collapse navbar-collapse" id="publicNavbar">
             <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="{{ url('/') }}">Inicio</a>
+                    <a class="nav-link text-dark {{ request()->url() == url('/') ? 'active' : '' }}"
+                        href="{{ url('/') }}">Inicio</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="{{ url('/posts') }}">Noticias</a>
+                    <a class="nav-link text-dark {{ request()->url() == route('posts.index') ? 'active' : '' }}"
+                        href="{{ route('posts.index') }}">Noticias</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="{{ url('/downloads') }}">Descargas</a>
+                    <a class="nav-link text-dark {{ request()->url() == url('/downloads') ? 'active' : '' }}"
+                        href="{{ url('/downloads') }}">Descargas</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="{{ url('/galleries') }}">Galería</a>
+                    <a class="nav-link text-dark {{ request()->url() == url('/galleries') ? 'active' : '' }}"
+                        href="{{ url('/galleries') }}">Galería</a>
                 </li>
 
                 <li class="nav-item mt-2 mt-lg-0">
-                    <a class="btn btn-primary" href="{{ url('/contact') }}">Contacto</a>
+                    <a class="btn btn-primary {{ request()->url() == url('/contact') ? 'active' : '' }}"
+                        href="{{ url('/contact') }}">Contacto</a>
                 </li>
             </ul>
         </div>
