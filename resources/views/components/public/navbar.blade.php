@@ -43,7 +43,7 @@
 
                 <li class="nav-item w-100">
                     <a class="btn btn-primary w-100{{ request()->url() == url('/contact') ? 'active' : '' }}"
-                        href="{{ url('/contact') }}">Contacto</a>
+                        href="{{ route('contact') }}">Contacto</a>
                 </li>
             </ul>
         </div>
