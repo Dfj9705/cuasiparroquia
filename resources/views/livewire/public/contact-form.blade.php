@@ -7,6 +7,10 @@
 
     <form wire:submit.prevent="submit">
         <div class="row g-3">
+            <div class="d-none">
+                <label>Sitio web</label>
+                <input type="text" wire:model.defer="website" tabindex="-1" autocomplete="off">
+            </div>
             <div class="col-md-6">
                 <label class="form-label">Nombre</label>
                 <input type="text" wire:model.defer="con_name" class="form-control">
