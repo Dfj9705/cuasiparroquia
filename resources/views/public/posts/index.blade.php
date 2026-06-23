@@ -10,7 +10,16 @@
                 <span class="badge bg-label-primary mb-2">Noticias</span>
                 <h1 class="h2 mb-0">Últimas publicaciones</h1>
             </div>
+            <form method="GET" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Buscar noticias..."
+                        value="{{ request('search') }}">
 
+                    <button class="btn btn-primary">
+                        Buscar
+                    </button>
+                </div>
+            </form>
             <div class="row g-4">
                 @forelse ($posts as $post)
                     <div class="col-md-6 col-lg-4">

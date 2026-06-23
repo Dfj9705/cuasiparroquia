@@ -12,6 +12,11 @@ class PostController extends Controller
     {
         $posts = Post::query()
             ->where('post_status', 'publicado')
+            ->when(
+                request('search'),
+                fn($query, $search) =>
+                $query->where('post_title', 'like', "%{$search}%")
+            )
             ->latest('post_published_at')
             ->paginate(9);
 
