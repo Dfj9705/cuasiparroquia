@@ -68,40 +68,7 @@
 
                             <h5 class="mb-4">Envíanos un mensaje</h5>
 
-                            <form method="POST" action="#">
-                                @csrf
-
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Nombre</label>
-                                        <input type="text" name="name" class="form-control" placeholder="Tu nombre">
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label">Correo</label>
-                                        <input type="email" name="email" class="form-control"
-                                            placeholder="correo@ejemplo.com">
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label class="form-label">Asunto</label>
-                                        <input type="text" name="subject" class="form-control"
-                                            placeholder="Asunto del mensaje">
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label class="form-label">Mensaje</label>
-                                        <textarea name="message" rows="5" class="form-control"
-                                            placeholder="Escribe tu mensaje"></textarea>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <button type="button" class="btn btn-primary">
-                                            Enviar mensaje
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
+                            <livewire:public.contact-form />
 
                         </div>
                     </div>
