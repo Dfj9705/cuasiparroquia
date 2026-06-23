@@ -3,41 +3,45 @@
 @section('title', $gallery->gal_title)
 
 @section('content')
-    <div class="container py-5">
 
-        <div class="mb-4">
-            <a href="{{ route('public.galleries.index') }}" class="btn btn-sm btn-outline-secondary mb-3">
-                <i class="bi bi-arrow-left me-2"></i> Volver a galerías
+    <section class="py-5">
+        <div class="container">
+
+            <a href="{{ route('galleries.index') }}" class="btn btn-sm btn-outline-primary mb-4">
+                ← Volver a galería
             </a>
+            <nav class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('home') }}">Inicio</a>
+                    </li>
 
-            <h1 class="fw-bold mb-2">{{ $gallery->gal_title }}</h1>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('galleries.index') }}">Galerías</a>
+                    </li>
 
-            @if($gallery->gal_description)
-                <p class="text-muted">{{ $gallery->gal_description }}</p>
-            @endif
+                    <li class="breadcrumb-item active">
+                        {{ $gallery->gal_title }}
+                    </li>
+                </ol>
+            </nav>
+            <div class="mb-4">
+                <span class="badge bg-label-primary mb-2">Galería</span>
+
+                <h1 class="h2 mb-2">
+                    {{ $gallery->gal_title }}
+                </h1>
+
+                @if ($gallery->gal_description)
+                    <p class="text-muted mb-0">
+                        {{ $gallery->gal_description }}
+                    </p>
+                @endif
+            </div>
+
+            <livewire:public.gallery-viewer :gallery="$gallery" />
+
         </div>
+    </section>
 
-        @if($gallery->items->count())
-            <div id="gallery-grid" class="gallery-grid">
-                @foreach($gallery->items as $item)
-                    <div class="gallery-item">
-                        <a href="{{ Storage::url($item->gitem_image) }}" class="gallery-lightbox"
-                            data-gallery="gallery-{{ $gallery->id }}" data-title="{{ $item->gitem_title }}">
-                            <img src="{{ Storage::url($item->gitem_image) }}" alt="{{ $item->gitem_title ?? $gallery->gal_title }}"
-                                loading="lazy">
-                        </a>
-                    </div>
-                @endforeach
-            </div>
-        @else
-            <div class="alert alert-info">
-                Esta galería aún no tiene fotografías publicadas.
-            </div>
-        @endif
-
-    </div>
 @endsection
-
-@push('scripts')
-    @vite('resources/js/gallery.js')
-@endpush

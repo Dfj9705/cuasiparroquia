@@ -1,72 +1,64 @@
 @extends('layouts.public')
 
-@section('title', $post->post_title)
-@section('meta_description', $post->post_excerpt ?? 'Detalle de publicación institucional.')
+@section('title', $post->post_meta_title ?? $post->post_title)
+@section('meta_description', $post->post_meta_description ?? Str::limit(strip_tags($post->post_content), 150))
 
 @section('content')
 
-    <section class="py-5 bg-light">
-        <div class="container">
-            @if($post->category)
-                <span class="badge bg-label-primary mb-3">
-                    {{ $post->category->pcat_name }}
-                </span>
-            @endif
-
-            <h1 class="fw-bold">{{ $post->post_title }}</h1>
-
-            <p class="text-muted mb-0">
-                Publicado el {{ $post->post_published_at?->format('d/m/Y') }}
-            </p>
-        </div>
-    </section>
-
     <section class="py-5">
         <div class="container">
-            @if($post->post_image)
-                <img src="{{ Storage::url($post->post_image) }}" class="img-fluid rounded shadow-sm mb-4"
-                    alt="{{ $post->post_title }}">
-            @endif
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
 
-            <article class="card shadow-sm">
-                <div class="card-body">
-                    {!! $post->post_content !!}
-                </div>
-            </article>
-        </div>
-    </section>
+                    <a href="{{ route('posts.index') }}" class="btn btn-sm btn-outline-primary mb-4">
+                        ← Volver a noticias
+                    </a>
+                    <nav class="mb-4">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('home') }}">Inicio</a>
+                            </li>
 
-    @if($relatedPosts->count())
-        <section class="py-5 bg-light">
-            <div class="container">
-                <h2 class="mb-4">Noticias relacionadas</h2>
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('posts.index') }}">Noticias</a>
+                            </li>
 
-                <div class="row g-4">
-                    @foreach($relatedPosts as $related)
-                        <div class="col-md-4">
-                            <div class="card h-100 shadow-sm">
-                                @if($related->post_image)
-                                    <img src="{{ Storage::url($related->post_image) }}" class="card-img-top"
-                                        alt="{{ $related->post_title }}">
-                                @endif
+                            <li class="breadcrumb-item active">
+                                {{ $post->post_title }}
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="card border-0 shadow-sm overflow-hidden">
 
-                                <div class="card-body">
-                                    <h5>{{ $related->post_title }}</h5>
+                        @if ($post->post_image)
+                            <img src="{{ asset('storage/' . $post->post_image) }}" class="post-detail-image"
+                                alt="{{ $post->post_title }}">
+                        @endif
 
-                                    <p class="text-muted">
-                                        {{ $related->post_excerpt }}
-                                    </p>
+                        <div class="card-body p-4 p-lg-5">
+                            <span class="badge bg-label-primary mb-3">
+                                {{ $post->category?->cat_name ?? 'Noticia' }}
+                            </span>
 
-                                    <a href="{{ route('public.posts.show', $related) }}" class="btn btn-outline-primary btn-sm">
-                                        Leer más
-                                    </a>
-                                </div>
+                            <h1 class="mb-3">
+                                {{ $post->post_title }}
+                            </h1>
+
+                            @if ($post->post_published_at)
+                                <p class="text-muted">
+                                    Publicado el {{ $post->post_published_at->format('d/m/Y') }}
+                                </p>
+                            @endif
+
+                            <div class="post-content mt-4">
+                                {!! $post->post_content !!}
                             </div>
                         </div>
-                    @endforeach
+                    </div>
+
                 </div>
             </div>
-        </section>
-    @endif
+        </div>
+    </section>
 
 @endsection

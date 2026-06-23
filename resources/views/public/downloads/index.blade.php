@@ -1,19 +1,18 @@
 @extends('layouts.public')
 
 @section('title', 'Descargas')
-@section('meta_description', 'Documentos y archivos disponibles para descarga.')
 
 @section('content')
 
-    <x-header-page titlePage="Descargas" />
-
     <section class="py-5">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <livewire:download-filter />
-                </div>
+            <div class="mb-4">
+                <span class="badge bg-label-primary mb-2">Recursos</span>
+                <h1 class="h2 mb-0">Descargas disponibles</h1>
             </div>
+
+
+            @livewire('public.download-filter')
         </div>
     </section>
 

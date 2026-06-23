@@ -26,13 +26,14 @@ class AppServiceProvider extends ServiceProvider
     {
         Download::observe(DownloadObserver::class);
         View::composer('*', function ($view) {
-
-            $settings = Cache::rememberForever(
-                'site_settings',
-                fn() => SiteSetting::first()
+            $view->with(
+                'siteSettings',
+                cache()->remember(
+                    'site_settings',
+                    now()->addHour(),
+                    fn() => SiteSetting::first()
+                )
             );
-
-            $view->with('siteSettings', $settings);
         });
     }
 }

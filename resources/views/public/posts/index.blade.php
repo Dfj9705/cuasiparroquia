@@ -1,19 +1,17 @@
 @extends('layouts.public')
 
 @section('title', 'Noticias')
-@section('meta_description', 'Noticias y publicaciones institucionales.')
 
 @section('content')
 
-    <x-header-page titlePage="Noticias" />
-
     <section class="py-5">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <livewire:post-search />
-                </div>
+            <div class="mb-4">
+                <span class="badge bg-label-primary mb-2">Noticias</span>
+                <h1 class="h2 mb-0">Últimas publicaciones</h1>
             </div>
+            @livewire('public.post-search')
+
         </div>
     </section>
 
