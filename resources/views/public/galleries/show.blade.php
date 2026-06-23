@@ -39,25 +39,7 @@
                 @endif
             </div>
 
-            @if ($gallery->items->isNotEmpty())
-                <div class="gallery-masonry">
-                    @foreach ($gallery->items as $item)
-                        <div class="gallery-masonry-item">
-                            <a href="{{ asset('storage/' . $item->gitem_image) }}" data-fancybox="gallery-{{ $gallery->id }}"
-                                data-caption="{{ $item->gitem_title }}">
-                                <img src="{{ asset('storage/' . $item->gitem_image) }}" alt="{{ $item->gitem_title }}">
-                            </a>
-                        </div>
-                    @endforeach
-                </div>
-            @else
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center py-5">
-                        <h5>Esta galería aún no tiene fotografías</h5>
-                        <p class="text-muted mb-0">Pronto se agregarán imágenes.</p>
-                    </div>
-                </div>
-            @endif
+            <livewire:public.gallery-viewer :gallery="$gallery" />
 
         </div>
     </section>
