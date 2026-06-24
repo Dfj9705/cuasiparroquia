@@ -113,7 +113,8 @@ class ItemsRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteAction::make()->requiresConfirmation(),
+                    Tables\Actions\DeleteBulkAction::make(),
+
                 ]),
             ]);
     }
