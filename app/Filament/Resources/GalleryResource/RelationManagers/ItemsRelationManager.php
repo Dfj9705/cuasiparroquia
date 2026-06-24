@@ -41,7 +41,6 @@ class ItemsRelationManager extends RelationManager
                     ->imageEditor()
                     ->required()
                     ->columnSpanFull()
-                    ->imageCropAspectRatio('3:2')
                     ->imageResizeMode('cover')
                     ->imageEditorAspectRatios([
                         '16:9',
