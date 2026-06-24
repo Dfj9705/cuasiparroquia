@@ -110,6 +110,9 @@ class ItemsRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteAction::make()->requiresConfirmation(),
             ]);
     }
 }
